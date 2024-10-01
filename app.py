@@ -49,9 +49,9 @@ def mostrar_ejercicio():
             st.error(f"Incorrecto. El {a_calcular} correcto es {opciones[a_calcular]}.")
 
     # Botón para generar un nuevo ejercicio
-    if st.button("Generar nuevo ejercicio"):
-        st.session_state.nuevo_ejercicio = True  # Indicamos que se debe generar un nuevo ejercicio
-        st.experimental_rerun()  # Actualizamos la página
+    #if st.button("Generar nuevo ejercicio"):
+        #st.session_state.nuevo_ejercicio = True  # Indicamos que se debe generar un nuevo ejercicio
+        #st.experimental_rerun()  # Actualizamos la página
 
 if __name__ == "__main__":
     mostrar_ejercicio()
