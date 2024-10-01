@@ -11,7 +11,7 @@ def generar_ejercicio():
 
 # Mostrar el ejercicio y pedir que se calcule uno de los valores
 def mostrar_ejercicio():
-    st.title("Práctica de Dividendo, Divisor, Cociente y Residuo")
+    st.title("Practicando la división")
 
     # Si no hay un ejercicio en el estado de sesión, lo generamos
     if "ejercicio" not in st.session_state or st.session_state.nuevo_ejercicio:
