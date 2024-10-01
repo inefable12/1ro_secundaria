@@ -1,5 +1,6 @@
 import streamlit as st
 import random
+import time
 
 # Función para generar un ejercicio aleatorio
 def generar_ejercicio():
@@ -13,8 +14,11 @@ def generar_ejercicio():
 def mostrar_ejercicio():
     st.title("Práctica de Dividendo, Divisor, Cociente y Residuo")
 
-    # Generamos un ejercicio
-    dividendo, divisor, cociente, residuo = generar_ejercicio()
+    # Iniciar sesión de estado para el ejercicio
+    if "ejercicio" not in st.session_state:
+        st.session_state.ejercicio = generar_ejercicio()
+
+    dividendo, divisor, cociente, residuo = st.session_state.ejercicio
 
     opciones = {
         "Dividendo": dividendo,
@@ -24,7 +28,10 @@ def mostrar_ejercicio():
     }
 
     # Seleccionamos aleatoriamente cuál de los valores pedir al usuario
-    a_calcular = random.choice(list(opciones.keys()))
+    if "a_calcular" not in st.session_state:
+        st.session_state.a_calcular = random.choice(list(opciones.keys()))
+
+    a_calcular = st.session_state.a_calcular
 
     st.write(f"Dado el siguiente ejercicio:")
     
@@ -34,14 +41,22 @@ def mostrar_ejercicio():
             st.write(f"{key}: {value}")
     
     # Solicitamos la respuesta del valor que falta
-    respuesta = st.number_input(f"¿Cuál es el {a_calcular}?", min_value=0)
+    respuesta = st.number_input(f"¿Cuál es el {a_calcular}?", min_value=0, step=1)
 
     # Verificación de la respuesta
     if st.button("Verificar respuesta"):
         if respuesta == opciones[a_calcular]:
-            st.success(f"¡Correcto! El {a_calcular} es {respuesta}.")
+            st.success(f"¡Correcto! El {a_calcular} es {respuesta}. 🎉")
+            # Animación de fuegos artificiales
+            st.balloons()
         else:
             st.error(f"Incorrecto. El {a_calcular} correcto es {opciones[a_calcular]}.")
+
+    # Botón para generar un nuevo ejercicio
+    if st.button("Generar nuevo ejercicio"):
+        st.session_state.ejercicio = generar_ejercicio()
+        st.session_state.a_calcular = random.choice(list(opciones.keys()))
+        st.experimental_rerun()
 
 if __name__ == "__main__":
     mostrar_ejercicio()
