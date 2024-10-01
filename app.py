@@ -1,6 +1,5 @@
 import streamlit as st
 import random
-import time
 
 # Función para generar un ejercicio aleatorio
 def generar_ejercicio():
@@ -14,9 +13,11 @@ def generar_ejercicio():
 def mostrar_ejercicio():
     st.title("Práctica de Dividendo, Divisor, Cociente y Residuo")
 
-    # Iniciar sesión de estado para el ejercicio
-    if "ejercicio" not in st.session_state:
+    # Si no hay un ejercicio en el estado de sesión, lo generamos
+    if "ejercicio" not in st.session_state or st.session_state.nuevo_ejercicio:
         st.session_state.ejercicio = generar_ejercicio()
+        st.session_state.a_calcular = random.choice(["Dividendo", "Divisor", "Cociente", "Residuo"])
+        st.session_state.nuevo_ejercicio = False  # Reiniciamos el indicador de nuevo ejercicio
 
     dividendo, divisor, cociente, residuo = st.session_state.ejercicio
 
@@ -27,19 +28,15 @@ def mostrar_ejercicio():
         "Residuo": residuo
     }
 
-    # Seleccionamos aleatoriamente cuál de los valores pedir al usuario
-    if "a_calcular" not in st.session_state:
-        st.session_state.a_calcular = random.choice(list(opciones.keys()))
-
     a_calcular = st.session_state.a_calcular
 
     st.write(f"Dado el siguiente ejercicio:")
-    
-    # Mostramos los otros valores
+
+    # Mostramos los valores disponibles, excepto el que se debe calcular
     for key, value in opciones.items():
         if key != a_calcular:
             st.write(f"{key}: {value}")
-    
+
     # Solicitamos la respuesta del valor que falta
     respuesta = st.number_input(f"¿Cuál es el {a_calcular}?", min_value=0, step=1)
 
@@ -47,16 +44,14 @@ def mostrar_ejercicio():
     if st.button("Verificar respuesta"):
         if respuesta == opciones[a_calcular]:
             st.success(f"¡Correcto! El {a_calcular} es {respuesta}. 🎉")
-            # Animación de fuegos artificiales
-            st.balloons()
+            st.balloons()  # Animación de fuegos artificiales
         else:
             st.error(f"Incorrecto. El {a_calcular} correcto es {opciones[a_calcular]}.")
 
     # Botón para generar un nuevo ejercicio
     if st.button("Generar nuevo ejercicio"):
-        st.session_state.ejercicio = generar_ejercicio()
-        st.session_state.a_calcular = random.choice(list(opciones.keys()))
-        st.experimental_rerun()
+        st.session_state.nuevo_ejercicio = True  # Indicamos que se debe generar un nuevo ejercicio
+        st.experimental_rerun()  # Actualizamos la página
 
 if __name__ == "__main__":
     mostrar_ejercicio()
